@@ -13,6 +13,7 @@ function App() {
     setSummary('');
     const result = await summarizeArticle(article);
     setSummary(result);
+    setLoading(false);
   };
 
   return (
