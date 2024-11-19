@@ -18,8 +18,11 @@ function App() {
   const formattedDate = formatter.format(today);
 
   const fetchNews = async () => {
+    //fetch news from api
     if (!companyName.trim()) return;
-    const NEWS_API_KEY = process.env.REACT_APP_NEWS_API_KEY;
+
+    console.log(import.meta.env.VITE_NEWS_API_KEY);
+    const NEWS_API_KEY = import.meta.env.VITE_NEWS_API_KEY;
 
     const NEWS_API_URL = 'https://newsapi.org/v2/everything?' +
     `q=${companyName}&` +
@@ -30,9 +33,22 @@ function App() {
 
     try {
       const response = await fetch(NEWS_API_URL);
-      const data = await response.json(); 
+      const data = await response.json();
+
       if (data.articles && data.articles.length > 0) {
         setArticles(data.articles);
+
+        setLoading(true);
+        // process each article and get summaries
+        const articleSummaries = await Promise.all(
+          data.articles.map(async (article) => {
+            const articleContent = article.content || article.description || "No content available"; 
+            const summary = await summarizeArticle(articleContent);
+            return summary;
+          })
+        );
+        setSummaries(articleSummaries);
+        setLoading(false);
       } else {
         console.log('No articles found.');
       }
@@ -41,40 +57,39 @@ function App() {
     }
   };
 
-  const handleSummarize = async () => {
-    setLoading(true);
-    for(let i = 0; i < articles.length; i++){
-      setSummaries([]);
-      const result = await summarizeArticle(article);
-      setSummary(result);
-    }
-    setLoading(false);
-  };
 
   return (
     <div className="App">
       <h1>AI News Summarizer</h1>
-      <textarea
+      <input
         rows="2"
         cols="20"
         placeholder="Type Company Name"
         value={companyName}
         onChange={(e) => setCompanyName(e.target.value)}
-      ></textarea>
+        className="input-field"
+      ></input>
       <br />
-      <button onClick={fetchNews}>Find Articles</button>
-      {loading && (
-        <div className="loading-spinner">
-          <div className="spinner"></div>
-          <p>Summarizing...</p>
-        </div>
-      )}
-      {summaries && (
-        <div>
-          <h2>Summaries:</h2>
-          <p>{summary}</p>
-        </div>
-      )}
+      <button onClick={fetchNews} className="fetch-button">Find Articles</button>
+      <div className="articles-container">
+        {loading && (
+          <div className="loading-spinner">
+            <div className="spinner"></div>
+            <p>Summarizing...</p>
+          </div>
+        )}
+        {articles.length > 0 && (
+          <ul>
+            {articles.map((article, index) => (
+              <li key={index} className="article-box">
+                <h3 className="article-title">{article.title}</h3>
+                <p className="article-summary">{summaries[index]}</p>
+                <a href={article.url} target="_blank" rel="noopener noreferrer" className="article-link">Read more</a>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
     </div>
       
   )

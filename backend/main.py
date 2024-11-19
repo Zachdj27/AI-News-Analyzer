@@ -22,7 +22,7 @@ class Article(BaseModel):
 @app.post("/summarize")
 def summarize_article(article: Article):
     tokenizer = BartTokenizer.from_pretrained("facebook/bart-large-cnn")
-    summary = summarizer(article.content, max_length=75, min_length=25, do_sample=False)
+    summary = summarizer(article.content, max_length=150, min_length=75, do_sample=False)
     return {"summary": summary[0]['summary_text']}
 
 if __name__ == "__main__":
