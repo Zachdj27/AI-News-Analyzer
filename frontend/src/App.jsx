@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { summarizeArticle } from './api';
 import './App.css'
 
-
 function App() {
   const [tickerSymbol, setTickerSymbol] = useState('');
   const [summaries, setSummaries] = useState([]);
@@ -13,20 +12,21 @@ function App() {
   const yesterday = new Date(today);
   yesterday.setDate(today.getDate() - 1);
 
-  const formatter = new Intl.DateTimeFormat('en-US', {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit'
-  });
-  const formattedToday = formatter.format(today);
-  const formattedYesterday = formatter.format(yesterday);
+  const formatDate = (date) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+  const formattedToday = formatDate(today);
+  const formattedYesterday = formatDate(yesterday);
 
   const fetchNews = async () => {
     //fetch news from api
     if (!tickerSymbol.trim()) return;
 
     const NEWS_API_KEY = import.meta.env.VITE_NEWS_API_KEY;
-    const finnhub = require('finnhub');
+    const API_ENDPOINT = 'https://finnhub.io/api/v1';
 
     const api_key = finnhub.ApiClient.instance.authentications['api_key'];
     api_key.apiKey = NEWS_API_KEY;
@@ -46,27 +46,34 @@ function App() {
     }
 
     try {
-      const response = await getCompanyNews(tickerSymbol, formattedYesterday, formattedToday);
-      const data = await response.json();
+      // const response = await getCompanyNews(tickerSymbol, formattedYesterday, formattedToday);
+      //console.log(`https://finnhub.io/api/v1/company-news?symbol=${tickerSymbol}&from=${formattedYesterday}&to=${formattedToday}`);
+      // const response = await fetch(`${API_ENDPOINT}/company-news?symbol=APPL&from=2024-12-02&to=2024-12-03&token=${NEWS_API_KEY}`);
+      fetch(`${API_ENDPOINT}/company-news?symbol=APPL&from=2024-12-02&to=2024-12-03&token=${NEWS_API_KEY}`)
+        .then(response => response.json())
+        .then(data => console.log(data));
 
-      if (data.articles && data.articles.length > 0) {
-        setArticles(data.articles);
 
-        setLoading(true);
-        // process each article and get summaries
-        const articleSummaries = await Promise.all(
-          data.articles.map(async (article) => {
-            const articleContent = article.content || article.description || "No content available"; 
-            // const summary = await summarizeArticle(articleContent);
-            const summary = articleContent;
-            return summary;
-          })
-        );
-        setSummaries(articleSummaries);
-        setLoading(false);
-      } else {
-        console.log('No articles found.');
-      }
+  //     const data = await response.json();
+
+  //     if (data.articles && data.articles.length > 0) {
+  //       setArticles(data.articles);
+
+  //       setLoading(true);
+  //       // process each article and get summaries
+  //       const articleSummaries = await Promise.all(
+  //         data.articles.map(async (article) => {
+  //           const articleContent = article.content || article.description || "No content available"; 
+  //           // const summary = await summarizeArticle(articleContent);
+  //           const summary = articleContent;
+  //           return summary;
+  //         })
+  //       );
+  //       setSummaries(articleSummaries);
+  //       setLoading(false);
+  //     } else {
+  //       console.log('No articles found.');
+  //     }
     } catch (error) {
       console.error('Error fetching news:', error);
     }
