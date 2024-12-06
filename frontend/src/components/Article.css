@@ -1,0 +1,29 @@
+.article-box {
+    background-color: #f9f9f9;
+    padding: 1rem;
+    margin: 1rem 0;
+    border-radius: 8px;
+    text-align: left;
+  }
+  
+  .article-title {
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+  }
+  
+  .article-summary {
+    font-size: 1rem;
+    color: #666;
+    margin-bottom: 0.5rem;
+  }
+  
+  .article-link {
+    color: #1e90ff;
+    text-decoration: none;
+  }
+  
+  .article-link:hover {
+    text-decoration: underline;
+  }
+  

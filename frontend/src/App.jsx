@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { summarizeArticle } from './api';
 import './App.css'
+import Article from './components/Article';
 
 function App() {
   const [tickerSymbol, setTickerSymbol] = useState('');
@@ -97,38 +98,55 @@ function App() {
 
 
   return (
-    <div className="App">
-      <h1>AI News Summarizer</h1>
-      <input
-        rows="2"
-        cols="20"
-        placeholder="Type Company Name"
-        value={tickerSymbol}
-        onChange={(e) => setTickerSymbol(e.target.value)}
-        className="input-field"
-      ></input>
-      <br />
-      <button onClick={fetchNews} className="fetch-button">Find Articles</button>
-      <div className="articles-container">
-        {loading && (
-          <div className="loading-spinner">
-            <div className="spinner"></div>
-            <p>Summarizing...</p>
-          </div>
-        )}
-        {articles.length > 0 && (
-          <ul>
-            {articles.map((article, index) => (
-              <li key={index} className="article-box">
-                <h3 className="article-title">{article.title}</h3>
-                <p className="article-summary">{summaries[index]}</p>
-                <a href={article.url} target="_blank" rel="noopener noreferrer" className="article-link">Read more</a>
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
+    <div className="flex items-center justify-center min-h-screen flex-col p-8">
+    <h1 className="text-3xl font-bold mb-4">AI News Summarizer</h1>
+    <input
+      rows="2"
+      cols="20"
+      placeholder="Type Company Name"
+      value={tickerSymbol}
+      onChange={(e) => setTickerSymbol(e.target.value)}
+      className="input-field p-2 border rounded"
+    />
+    <br />
+    <button onClick={fetchNews} className="fetch-button mt-4 py-2 px-4 bg-green-500 text-white rounded">
+      Find Articles
+    </button>
+    <div className="articles-container mt-8 w-full max-w-4xl">
+      {loading && (
+        <div className="loading-spinner">
+          <div className="spinner"></div>
+          <p>Summarizing...</p>
+        </div>
+      )}
+      {articles.length > 0 && (
+        <ul className="space-y-6">
+          {articles.map((article, index) => (
+            <li
+              key={index}
+              className="article-box p-4 bg-gray-800 rounded-lg shadow-md"
+            >
+              <h3 className="article-title text-xl font-semibold mb-2">
+                {article.title}
+              </h3>
+              <p className="article-summary text-gray-400 mb-4">
+                {summaries[index]}
+              </p>
+              <a
+                href={article.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="article-link text-blue-400 hover:text-blue-300"
+              >
+                Read more
+              </a>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
+  </div>
+  
       
   )
 }
