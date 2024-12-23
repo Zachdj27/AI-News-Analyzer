@@ -6,6 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 import finnhub
 import os
 from dotenv import load_dotenv
+from polygon import RESTClient
 
 
 app= FastAPI()
@@ -14,17 +15,18 @@ load_dotenv()
 API_KEY = os.getenv("API_KEY")
 
 summarizer = pipeline("summarization", model="facebook/bart-large-cnn")
+sentiment_analyzer = pipeline("text-classification", model="ProsusAI/finbert")
 
-@app.get("/company-news")
-def get_data(
-    symbol: str = Query(..., alias="symbol"),
-    from_date: str = Query(..., alias="from"),
-    to_date: str = Query(..., alias="to")
-):
-    finnhub_client = finnhub.Client(api_key=API_KEY)
-    data = finnhub_client.company_news(symbol.upper(), _from=from_date, to=to_date)
-    return data
-
+# @app.get("/company-news")
+# def get_data(
+#     symbol: str = Query(..., alias="symbol"),
+#     from_date: str = Query(..., alias="from"),
+#     to_date: str = Query(..., alias="to")
+# ):
+#     finnhub_client = finnhub.Client(api_key=API_KEY)
+#     data = finnhub_client.company_news(symbol.upper(), _from=from_date, to=to_date)
+#     return data
+    
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -35,6 +37,11 @@ app.add_middleware(
 
 class Article(BaseModel):
     content: str
+    
+@app.post("/analyze"):
+def analyze_article(article: Article):
+    analysis = sentiment_analyzer(article.content)
+    return analysis
     
 @app.post("/summarize")
 def summarize_article(article: Article):
