@@ -49,7 +49,7 @@ function App() {
     try {
       // const response = await getCompanyNews(tickerSymbol, formattedYesterday, formattedToday);
       //console.log(`https://finnhub.io/api/v1/company-news?symbol=${tickerSymbol}&from=${formattedYesterday}&to=${formattedToday}`);
-      const response = await fetch(`${API_ENDPOINT}/company-news?symbol=AAPL&from=2024-12-02&to=2024-12-03&token=${NEWS_API_KEY}`);
+      const response = await fetch(`${API_ENDPOINT}/company-news?symbol=${tickerSymbol}&from=${formattedYesterday}&to=${formattedToday}&token=${NEWS_API_KEY}`);
       // fetch(`${API_ENDPOINT}/company-news?symbol=AAPL&from=2024-12-02&to=2024-12-03&token=${NEWS_API_KEY}`)
       //   .then(response => response.json())
       //   .then(data => console.log(data));
@@ -76,7 +76,7 @@ function App() {
       const articles = [];
       let i = 0;
       console.log(data.length);
-      while (summaries.length < 6 && i < data.length){
+      while (summaries.length < 8 && i < data.length){
         const article = data[i];
         const summary = article.summary;
         if (summary.length > 0){
@@ -122,25 +122,11 @@ function App() {
       {articles.length > 0 && (
         <ul className="space-y-6">
           {articles.map((article, index) => (
-            <li
+            <Article            
               key={index}
-              className="article-box p-4 bg-gray-800 rounded-lg shadow-md"
-            >
-              <h3 className="article-title text-xl font-semibold mb-2">
-                {article.title}
-              </h3>
-              <p className="article-summary text-gray-400 mb-4">
-                {summaries[index]}
-              </p>
-              <a
-                href={article.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="article-link text-blue-400 hover:text-blue-300"
-              >
-                Read more
-              </a>
-            </li>
+              summary={summaries[index]}
+              url={article.url}/>
+   
           ))}
         </ul>
       )}
