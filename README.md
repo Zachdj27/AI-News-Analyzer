@@ -1,6 +1,10 @@
 # AI-powered News Summarizer & Analyzer
 ### This project is still in development!
 
+![Video Example](https://github.com/user-attachments/assets/65961f2b-cf2f-4c0c-8067-98eead0e6311)
+
+
+
 ## Project Overview
 This project is an AI-powered web application designed to analyze financial news articles and classify them as either **bullish** or **bearish**. Leveraging natural language processing (NLP) and machine learning techniques, the app provides real-time sentiment analysis to help users make informed stock market decisions.
 
