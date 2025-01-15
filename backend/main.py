@@ -56,6 +56,7 @@ def post_company_news(ticker_symbol):
             content = get_news(url=url)
             if content:
                 articles.append(content)
+        i += 1
     return articles
 
 @app.get("/company-data")
@@ -66,18 +67,20 @@ class Article(BaseModel):
     content: str
     
 @app.post("/analyze")
-def analyze_article(sumarized_article: str):
-    analysis = sentiment_analyzer(summarize_article)
+def analyze_article(summarized_article: str):
+    analysis = sentiment_analyzer(summarized_article)
     return analysis
     
 @app.post("/summarize")
 def summarize_article(news_article: str):
+    if len(news_article) < 120:
+        return news_article
     max_input_length = 4096
     news_article = news_article[:max_input_length]
     
     tokenizer = BartTokenizer.from_pretrained("facebook/bart-large-cnn")
-    summary = summarizer(news_article, max_length=350, min_length=250, do_sample=False)
-    return {"summary": summary[0]['summary_text']}
+    summary = summarizer(news_article, max_length=350, min_length=100, do_sample=False)
+    return str(summary[0]['summary_text'])
 
 
 if __name__ == "__main__":

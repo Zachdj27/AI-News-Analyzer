@@ -11,7 +11,7 @@ import re
 
 def fetch_article_content(url):
     options = Options()
-    options.add_argument('--headless')  
+    # options.add_argument('--headless')  
     options.add_argument('--disable-blink-features=AutomationControlled')
     options.add_argument('--disable-gpu')  
     options.add_argument('--no-sandbox')
@@ -26,7 +26,7 @@ def fetch_article_content(url):
     driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
     
     #wait for page to load
-    time.sleep(1)
+    time.sleep(0.5)
 
     #handle the "Accept all cookies" button
     try:
@@ -36,7 +36,7 @@ def fetch_article_content(url):
         driver.execute_script("arguments[0].scrollIntoView();", accept_all_button)
         ActionChains(driver).move_to_element(accept_all_button).click().perform()
         print("Clicked 'Accept all' button.")
-        time.sleep(0.25)  
+        time.sleep(0.5)  
     except TimeoutException:
         print("Cookie consent overlay missing or already accepted.")
 
@@ -59,7 +59,7 @@ def fetch_article_content(url):
         print("Found 'Read more' button, clicking it.")
         driver.execute_script("arguments[0].scrollIntoView();", read_more_button)
         ActionChains(driver).move_to_element(read_more_button).click().perform()
-        time.sleep(0.25)
+        time.sleep(0.5)
     except TimeoutException:
         print("No 'Read more' button found.")
 
