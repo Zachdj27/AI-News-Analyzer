@@ -1,4 +1,5 @@
 # AI-powered News Summarizer & Analyzer
+### This project is still in development!
 
 
 https://github.com/user-attachments/assets/2f66f2be-84ae-4687-8b09-9e2e60c8079b
