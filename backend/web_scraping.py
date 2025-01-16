@@ -11,7 +11,7 @@ import re
 
 def fetch_article_content(url):
     options = Options()
-    # options.add_argument('--headless')  
+    options.add_argument('--headless')  
     options.add_argument('--disable-blink-features=AutomationControlled')
     options.add_argument('--disable-gpu')  
     options.add_argument('--no-sandbox')
