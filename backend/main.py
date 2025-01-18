@@ -90,7 +90,7 @@ def process_news(ticker_symbol: str):
                 i += 1
             except IndexError as e:
                 print(f"IndexError at index {i}: {e}")
-                break
+                i += 1
             except Exception as e:
                 print(f"An unexpected error occurred: {e}")
                 i += 1  
@@ -111,7 +111,7 @@ def process_news(ticker_symbol: str):
 if __name__ == "__main__":
     # import uvicorn
     # uvicorn.run(app, host="127.0.0.1", port=8000)
-    news = process_news("AAPL")
+    news = process_news("META")
     print(news)
 
 # @app.get("/company-news")
