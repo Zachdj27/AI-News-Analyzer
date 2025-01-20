@@ -109,10 +109,10 @@ def process_news(ticker_symbol: str):
 
     
 if __name__ == "__main__":
-    # import uvicorn
-    # uvicorn.run(app, host="127.0.0.1", port=8000)
-    news = process_news("META")
-    print(news)
+    import uvicorn
+    uvicorn.run(app, host="127.0.0.1", port=8000)
+    # news = process_news("META")
+    # print(news)
 
 # @app.get("/company-news")
 # def get_news(url):
