@@ -16,8 +16,8 @@ load_dotenv()
 API_KEY = os.getenv("API_KEY")
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
-summarizer = pipeline("summarization", model="facebook/bart-large-cnn")
-sentiment_analyzer = pipeline("text-classification", model="ProsusAI/finbert")
+summarizer = pipeline("summarization", model="facebook/bart-large-cnn", trust_remote_code=False)
+sentiment_analyzer = pipeline("text-classification", model="ProsusAI/finbert", trust_remote_code=False)
 
 # @app.get("/company-news")
 # def get_data(
@@ -90,7 +90,7 @@ def process_news(ticker_symbol: str):
                 i += 1
             except IndexError as e:
                 print(f"IndexError at index {i}: {e}")
-                break
+                i += 1
             except Exception as e:
                 print(f"An unexpected error occurred: {e}")
                 i += 1  
@@ -109,10 +109,10 @@ def process_news(ticker_symbol: str):
 
     
 if __name__ == "__main__":
-    # import uvicorn
-    # uvicorn.run(app, host="127.0.0.1", port=8000)
-    news = process_news("AAPL")
-    print(news)
+    import uvicorn
+    uvicorn.run(app, host="127.0.0.1", port=8000)
+    # news = process_news("META")
+    # print(news)
 
 # @app.get("/company-news")
 # def get_news(url):
