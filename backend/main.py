@@ -16,8 +16,8 @@ load_dotenv()
 API_KEY = os.getenv("API_KEY")
 os.environ["TOKENIZERS_PARALLELISM"] = "false"
 
-summarizer = pipeline("summarization", model="facebook/bart-large-cnn")
-sentiment_analyzer = pipeline("text-classification", model="ProsusAI/finbert")
+summarizer = pipeline("summarization", model="facebook/bart-large-cnn", trust_remote_code=False)
+sentiment_analyzer = pipeline("text-classification", model="ProsusAI/finbert", trust_remote_code=False)
 
 # @app.get("/company-news")
 # def get_data(
