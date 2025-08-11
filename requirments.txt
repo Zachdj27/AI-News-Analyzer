@@ -8,7 +8,7 @@ fastapi==0.115.5
 filelock==3.16.1
 finnhub-python==2.4.22
 fsspec==2024.10.0
-h11>=0.16.0
+h11==0.16.0
 httpcore==1.0.7
 httpx==0.28.0
 huggingface-hub==0.26.2
